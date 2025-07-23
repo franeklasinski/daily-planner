@@ -52,7 +52,7 @@ def index():
 def get_calendar_data(year, month):
     """API: Pobiera dane kalendarza dla danego miesiąca"""
     try:
-        # Pobierz wydarzenia dla miesiąca
+        # Pobiera wydarzenia dla miesiąca
         start_date = date(year, month, 1)
         if month == 12:
             end_date = date(year + 1, 1, 1) - timedelta(days=1)
@@ -64,7 +64,7 @@ def get_calendar_data(year, month):
             Event.date <= end_date
         ).all()
         
-        # Grupuj wydarzenia po datach
+        # Grupuje wydarzenia po datach
         events_by_date = {}
         for event in events:
             date_str = event.date.strftime('%Y-%m-%d')
@@ -72,7 +72,7 @@ def get_calendar_data(year, month):
                 events_by_date[date_str] = []
             events_by_date[date_str].append(event.to_dict())
         
-        # Generuj kalendarz
+        # Generuje kalendarz
         cal = calendar.monthcalendar(year, month)
         
         return jsonify({
@@ -178,8 +178,8 @@ if __name__ == "__main__":
     print("Dostępna na: http://localhost:5001")
     print("=" * 50)
     
-    # Inicjalizuj bazę danych
+    # Inicjalizuje bazę danych
     init_db()
     
-    # Uruchom aplikację zmieni poort jezeli zajety 
+    # Uruchamia aplikację zmieni poort jezeli zajety 
     app.run(debug=True, host='0.0.0.0', port=5001)
