@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalendarz - Planer Dnia</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-calendar-alt"></i> Kalendarz - Planer Dnia</h1>
+                <div class="header-buttons">
+                    <button class="btn btn-primary" onclick="showAddEventModal()">
+                        <i class="fas fa-plus"></i> Dodaj wydarzenie
+                    </button>
+                    <button class="btn btn-secondary" onclick="showSearchModal()">
+                        <i class="fas fa-search"></i> Wyszukaj
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Calendar Navigation -->
+            <div class="calendar-nav">
+                <button class="nav-btn" onclick="changeMonth(-1)">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <h2 id="month-year" class="month-title"></h2>
+                <button class="nav-btn" onclick="changeMonth(1)">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <button class="btn btn-small" onclick="goToToday()">Dzisiaj</button>
+            </div>
+
+            <div class="calendar-container">
+                <!-- Calendar Grid -->
+                <div class="calendar-wrapper">
+                    <div class="calendar">
+                        <div class="calendar-header">
+                            <div class="day-header">Pon</div>
+                            <div class="day-header">Wto</div>
+                            <div class="day-header">Śro</div>
+                            <div class="day-header">Czw</div>
+                            <div class="day-header">Pią</div>
+                            <div class="day-header">Sob</div>
+                            <div class="day-header">Nie</div>
+                        </div>
+                        <div class="calendar-body" id="calendar-body">
+                            <!-- Calendar days will be generated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Events Panel -->
+                <div class="events-panel">
+                    <div class="events-header">
+                        <h3 id="selected-date">Wybierz dzień</h3>
+                    </div>
+                    <div class="events-list" id="events-list">
+                        <div class="no-events">
+                            <i class="fas fa-calendar-check"></i>
+                            <p>Kliknij na dzień w kalendarzu, aby zobaczyć wydarzenia</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Event Modal -->
+    <div id="event-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Dodaj wydarzenie</h3>
+                <button class="modal-close" onclick="closeEventModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="event-form">
+                <input type="hidden" id="event-id">
+                <input type="hidden" id="event-date">
+                
+                <div class="form-group">
+                    <label for="start-time">Godzina rozpoczęcia:</label>
+                    <input type="time" id="start-time" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="end-time">Godzina zakończenia (opcjonalnie):</label>
+                    <input type="time" id="end-time">
+                </div>
+                
+                <div class="form-group">
+                    <label for="event-title">Tytuł wydarzenia:</label>
+                    <input type="text" id="event-title" placeholder="Wpisz tytuł wydarzenia" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="event-description">Opis (opcjonalnie):</label>
+                    <textarea id="event-description" placeholder="Dodatkowe informacje o wydarzeniu" rows="3"></textarea>
+                </div>
+                
+                <div class="modal-buttons">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Zapisz
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEventModal()">
+                        Anuluj
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Search Modal -->
+    <div id="search-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Wyszukaj wydarzenia</h3>
+                <button class="modal-close" onclick="closeSearchModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-content">
+                <div class="form-group">
+                    <input type="text" id="search-input" placeholder="Wpisz szukaną frazę..." onkeyup="performSearch()">
+                </div>
+                <div id="search-results" class="search-results">
+                    <p class="search-placeholder">Wpisz frazę, aby wyszukać wydarzenia</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div id="loading" class="loading" style="display: none;">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Ładowanie...</p>
+        </div>
+    </div>
+
+    <!-- Success/Error messages -->
+    <div id="toast" class="toast"></div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        // Initialize app with current date
+        const today = new Date();
+        let currentYear = {{ current_year }};
+        let currentMonth = {{ current_month }};
+        let selectedDate = null;
+        const todayString = "{{ today }}";
+        
+        // Start the app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCalendar(currentYear, currentMonth);
+        });
+    </script>
+</body>
+</html>
