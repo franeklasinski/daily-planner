@@ -17,7 +17,6 @@ Nowoczesna aplikacja kalendarza/planera napisana w Pythonie z Flask i interfejse
 <img width="1470" height="838" alt="Zrzut ekranu 2025-07-23 o 12 45 08" src="https://github.com/user-attachments/assets/66e6ba72-f3ea-4fba-a66b-3b3f4c651f3c" />
 
 
-
 ## Wymagania
 
 - Python 3.7+
